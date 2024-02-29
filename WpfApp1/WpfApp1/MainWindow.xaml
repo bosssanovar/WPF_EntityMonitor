@@ -1,0 +1,59 @@
+﻿<Window x:Class="WpfApp1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1"
+        xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+        mc:Ignorable="d"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Title="MainWindow" d:Height="450" d:Width="500"
+        SizeToContent="WidthAndHeight">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" Grid.Row="0" Margin="5" HorizontalAlignment="Left" Text="文字入力（10文字以下）"/>
+            <TextBlock Grid.Column="0" Grid.Row="1" Margin="5" HorizontalAlignment="Left" Text="数値入力（500以下）"/>
+            <TextBlock Grid.Column="0" Grid.Row="2" Margin="5" HorizontalAlignment="Left" Text="チェックボックス入力"/>
+            <TextBlock Grid.Column="0" Grid.Row="3" Margin="5" HorizontalAlignment="Left">
+                コンボボックス入力<LineBreak />
+                （チェックボックスがTrue時にのみ「ネコ」有効）
+            </TextBlock>
+
+            <TextBox Grid.Column="1" Grid.Row="0" Margin="5" Width="200" HorizontalAlignment="Left" Text="{Binding Text.Value}"/>
+            <TextBox Grid.Column="1" Grid.Row="1" Margin="5" Width="100" HorizontalAlignment="Left" Text="{Binding Number.Value}"/>
+            <CheckBox Grid.Column="1" Grid.Row="2" Margin="5" Content="Sample Text" HorizontalAlignment="Left"
+                      IsChecked="{Binding Bool.Value}"/>
+            <ComboBox Grid.Column="1" Grid.Row="3" Margin="5" ItemsSource="{Binding ComboBoxItems.Value}"
+                      DisplayMemberPath="Display" SelectedValuePath="Value" SelectedValue="{Binding SomeEnum.Value}"/>
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="5" HorizontalAlignment="Center" Background="LightSkyBlue">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <CheckBox Margin="5" VerticalAlignment="Center" Content="自動保存" IsChecked="{Binding IsAutoSave}"/>
+                <Button Margin="5" VerticalAlignment="Center" Content="保存" Command="{Binding SaveCommand}"/>
+            </StackPanel>
+            <Button Grid.Row="1" Margin="5" Content="初期化" Command="{Binding InitCommand}"/>
+        </Grid>
+    </Grid>
+</Window>
