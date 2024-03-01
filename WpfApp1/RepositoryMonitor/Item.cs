@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RepositoryMonitor
 {
-    public record Item(string Path, string Value)
+    public record Item(string Path, string OldValue, string NewValue)
     {
     }
 }

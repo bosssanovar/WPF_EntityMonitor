@@ -4,7 +4,9 @@ using Repository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,27 +31,63 @@ namespace RepositoryMonitor
 
             var nowEntity = _repository.Load();
 
-            if (_presentEntity.Text != nowEntity.Text)
-            {
-                Items.Insert(0, new Item("Text", nowEntity.Text.Content));
-            }
+            var presentProperties = GetEntityProperties(_presentEntity);
+            var nowProperties = GetEntityProperties(nowEntity);
 
-            if (_presentEntity.Number != nowEntity.Number)
+            foreach (var name in presentProperties.Keys)
             {
-                Items.Insert(0, new Item("Number", nowEntity.Number.Content.ToString()));
-            }
+                if (!nowProperties.ContainsKey(name)) continue;
 
-            if (_presentEntity.Bool != nowEntity.Bool)
-            {
-                Items.Insert(0, new Item("Bool", nowEntity.Bool.Content.ToString()));
-            }
-
-            if (_presentEntity.SomeEnum != nowEntity.SomeEnum)
-            {
-                Items.Insert(0, new Item("SomeEnum", nowEntity.SomeEnum.Content.GetText()));
+                if (presentProperties[name] != nowProperties[name])
+                {
+                    Items.Insert(0, new Item(name, presentProperties[name], nowProperties[name]));
+                }
             }
 
             _presentEntity = nowEntity;
+        }
+
+        private static Dictionary<string, string> GetEntityProperties(XXEntity nowEntity)
+        {
+            var ret = new Dictionary<string, string>();
+
+            // Entityの型を取得
+            Type entityType = nowEntity.GetType();
+
+            // Entityのプロパティの一覧を取得
+            PropertyInfo[] entityPropertyInfos = entityType.GetProperties();
+
+            // Entityのプロパティ一覧を列挙
+            foreach (PropertyInfo entityPropertyInfo in entityPropertyInfos)
+            {
+                // ValueObjectプロパティ名を取得
+                string entityPropertyName = entityPropertyInfo.Name;
+
+                // ValueObjectオブジェクトを取得
+                var entityPropertyValue = entityPropertyInfo.GetValue(nowEntity);
+
+                if (entityPropertyValue != null)
+                {
+                    //  ValueObjectオブジェクトの型を取得
+                    Type voPropertyType = entityPropertyValue.GetType();
+
+                    // ValueObjectのContentプロパティ情報を取得
+                    var voPropertyInfo = voPropertyType.GetProperty("Content");
+
+                    if (voPropertyInfo != null)
+                    {
+                        // ValueObjectのContentプロパティ値を取得
+                        var voPropertyValue = voPropertyInfo.GetValue(entityPropertyValue);
+
+                        if (voPropertyValue != null)
+                        {
+                            ret[entityPropertyName] = voPropertyValue.ToString() ?? "{NULL}";
+                        }
+                    }
+                }
+            }
+
+            return ret;
         }
     }
 }
