@@ -19,7 +19,7 @@ namespace RepositoryMonitor
 #pragma warning restore CS0067 // イベント 'RepositoryMonitorView.PropertyChanged' は使用されていません
 
         readonly IXXRepository _repository;
-        XXEntity? _presentEntity;
+        XXEntity? _oldEntity;
 
         public ReactiveCollection<Item> Items { get; } = [];
 
@@ -27,24 +27,24 @@ namespace RepositoryMonitor
 
         private void DetectDifference()
         {
-            _presentEntity ??= _repository.Load();
+            _oldEntity ??= _repository.Load();
 
-            var nowEntity = _repository.Load();
+            var newEntity = _repository.Load();
 
-            var presentProperties = GetEntityProperties(_presentEntity);
-            var nowProperties = GetEntityProperties(nowEntity);
+            var oldProperties = GetEntityProperties(_oldEntity);
+            var newProperties = GetEntityProperties(newEntity);
 
-            foreach (var name in presentProperties.Keys)
+            foreach (var name in oldProperties.Keys)
             {
-                if (!nowProperties.ContainsKey(name)) continue;
+                if (!newProperties.ContainsKey(name)) continue;
 
-                if (presentProperties[name] != nowProperties[name])
+                if (oldProperties[name] != newProperties[name])
                 {
-                    Items.Insert(0, new Item(name, presentProperties[name], nowProperties[name]));
+                    Items.Insert(0, new Item(name, oldProperties[name], newProperties[name]));
                 }
             }
 
-            _presentEntity = nowEntity;
+            _oldEntity = newEntity;
         }
 
         private static Dictionary<string, string> GetEntityProperties(XXEntity nowEntity)
