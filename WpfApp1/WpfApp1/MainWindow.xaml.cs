@@ -40,9 +40,11 @@ namespace WpfApp1
                     Debug.WriteLine("Text ConvertBack");
 
                     var currected = TextVO.CurrectValue(x);
-                    var entity = _model.Entity.Value.Clone();
-                    entity.Text = new(currected);
-                    return entity;
+                    _model.Entity.Value.Text = new(currected);
+
+                    _model.ForceNotify();
+
+                    return _model.Entity.Value;
                 });
 
             Number = _model.Entity.ToReactivePropertySlimAsSynchronized(
@@ -53,9 +55,11 @@ namespace WpfApp1
                     Debug.WriteLine("Number ConvertBack");
 
                     var currected = NumberVO.CurrectValue(x);
-                    var entity = _model.Entity.Value.Clone();
-                    entity.Number = new(currected);
-                    return entity;
+                    _model.Entity.Value.Number = new(currected);
+
+                    _model.ForceNotify();
+
+                    return _model.Entity.Value;
                 });
 
             Bool = _model.Entity.ToReactivePropertySlimAsSynchronized(
@@ -66,9 +70,11 @@ namespace WpfApp1
                     Debug.WriteLine("Bool ConvertBack");
 
                     var currected = BoolVO.CurrectValue(x);
-                    var entity = _model.Entity.Value.Clone();
-                    entity.Bool = new(currected);
-                    return entity;
+                    _model.Entity.Value.Bool = new(currected);
+
+                    _model.ForceNotify();
+
+                    return _model.Entity.Value;
                 });
 
             SomeEnum = _model.Entity.ToReactivePropertySlimAsSynchronized(
@@ -79,9 +85,11 @@ namespace WpfApp1
                     Debug.WriteLine("SomeEnum ConvertBack");
 
                     var currected = SomeEnumVO.CurrectValue(x);
-                    var entity = _model.Entity.Value.Clone();
-                    entity.SomeEnum = new(currected);
-                    return entity;
+                    _model.Entity.Value.SomeEnum = new(currected);
+
+                    _model.ForceNotify();
+
+                    return _model.Entity.Value;
                 });
 
             InitCommand = new AsyncReactiveCommand();

@@ -59,5 +59,10 @@ namespace WpfApp1
 
             _saveLoadUsecase.Save(Entity.Value);
         }
+
+        internal void ForceNotify()
+        {
+            Entity.ForceNotify();
+        }
     }
 }

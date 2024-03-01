@@ -35,15 +35,7 @@
 
         public XXEntity Clone()
         {
-            var ret = new XXEntity
-            {
-                Text = Text,
-                Number = Number,
-                Bool = Bool,
-                SomeEnum = SomeEnum
-            };
-
-            return ret;
+            return (XXEntity)MemberwiseClone();
         }
 
         private void CurrectSomeEnumIfNeed()
